@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>sudah terbiasa terjadi tante.</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      background: black;
+      overflow: hidden;
+      font-family: 'Poppins', sans-serif;
+      position: relative;
+    }
+
+    .static-background {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: url('https://images.unsplash.com/photo-1517816428104-797678c7cf40?auto=format&fit=crop&w=1400&q=80') no-repeat center center;
+      background-size: cover;
+      z-index: -2;
+    }
+
+    .moving-background {
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background: url('https://www.transparenttextures.com/patterns/stardust.png');
+      background-repeat: repeat;
+      transform: rotate(-20deg);
+      animation: scrollBg 60s linear infinite;
+      z-index: -1;
+      opacity: 0.3;
+    }
+
+    @keyframes scrollBg {
+      from { background-position: 0 0; }
+      to { background-position: -1000px 1000px; }
+    }
+
+    .text-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 1;
+      padding: 40px;
+    }
+
+    .rainbow-text {
+      font-size: 2.4rem;
+      font-weight: 600;
+      white-space: nowrap;
+      animation: move 25s linear infinite, rainbow 3s linear infinite;
+      text-shadow:
+        0 0 5px #00f,
+        0 0 10px #00f,
+        0 0 20px #00f,
+        0 0 30px #00f,
+        0 0 40px #00f,
+        0 0 50px #00f;
+      user-select: text;
+    }
+
+    .copyright {
+      margin-top: 60px;
+      font-size: 1rem;
+      color: #00f;
+      text-shadow: 0 0 5px #00f;
+      animation: fadeIn 4s ease-in;
+      user-select: text;
+    }
+
+    @keyframes move {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    @keyframes rainbow {
+      0% { color: red; }
+      14% { color: orange; }
+      28% { color: yellow; }
+      42% { color: green; }
+      57% { color: cyan; }
+      71% { color: blue; }
+      85% { color: violet; }
+      100% { color: red; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    #playBtn {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #00f;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 0 10px #00f;
+      z-index: 2;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- background besar statis -->
+  <div class="static-background"></div>
+
+  <!-- background kecil bergerak -->
+  <div class="moving-background"></div>
+
+  <div class="text-container">
+    <div class="rainbow-text">
+      Tanteeeee.....           Sudah Terbiasa Terjadi Tante, Teman Datang Ketika Lagi Butuh Saja, Coba Kalau Lagi Susah, Mereka Semua Menghilaaaang.
+    </div>
+    <div class="copyright">© TuanVinn</div>
+  </div>
+
+  <button id="playBtn">Putar Musik Todd</button>
+
+  <audio id="bg-audio" loop>
+    <source src="https://files.catbox.moe/peiva8.mp3" type="audio/mpeg">
+    Browser Anda tidak mendukung pemutar audio.
+  </audio>
+
+  <script>
+    const audio = document.getElementById('bg-audio');
+    const playBtn = document.getElementById('playBtn');
+    let keysPressed = {};
+
+    // Autoplay saat halaman dimuat
+    window.addEventListener('DOMContentLoaded', () => {
+      audio.play().catch(() => {
+        playBtn.style.display = 'block';
+      });
+    });
+
+    playBtn.addEventListener('click', () => {
+      audio.play();
+      playBtn.style.display = 'none';
+    });
+
+    // Tombol rahasia Shift+P untuk pause, Shift+P+L untuk play
+    document.addEventListener('keydown', (e) => {
+      keysPressed[e.key.toLowerCase()] = true;
+
+      if (e.shiftKey && keysPressed['p'] && keysPressed['l']) {
+        audio.play();
+        playBtn.style.display = 'none';
+      } else if (e.shiftKey && keysPressed['p'] && !keysPressed['l']) {
+        audio.pause();
+        playBtn.style.display = 'block';
+      }
+    });
+
+    document.addEventListener('keyup', (e) => {
+      delete keysPressed[e.key.toLowerCase()];
+    });
+  </script>
+</body>
+</html>
